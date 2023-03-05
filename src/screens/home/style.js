@@ -66,6 +66,7 @@ export const ImageUser = styled.Image`
 export const ContainerCard = styled.View`
     flex-direction: row;
     justify-content: space-around;
+    margin-bottom: ${RFValue(20)}px;
 `;
 
 export const Card = styled.TouchableOpacity`

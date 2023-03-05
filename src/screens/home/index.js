@@ -5,6 +5,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from "@react-navigation/native";
 import ButtonDrawer from '../../components/buttonDrawer'
 import { FontAwesome5 } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons'; 
 
 import {
     Content,
@@ -50,14 +52,14 @@ export default () => {
 
             <Content>
 
-                <CardVenda>
-                    <CardImage source={require('../../assets/icon_add_venda.png')} />
+                <CardVenda onPress={() => navigation.navigate("venda")}>
+                    <MaterialIcons name="point-of-sale" size={40} color={'#008be3'} />
                     <CardText>Vendas</CardText>
                 </CardVenda>
 
                 <ContainerCard>
-                    <Card>
-                        <CardImage source={require('../../assets/icon_add_user.png')} />
+                    <Card onPress={() => navigation.navigate("cliente")}>
+                        <Entypo name="users" size={40} color={'#008be3'} />
                         <CardText>Clientes</CardText>
                     </Card>
 
@@ -66,6 +68,7 @@ export default () => {
                         <CardText>Produtos</CardText>
                     </Card>
                 </ContainerCard>
+                
 
             </Content>
         </LinearGradient>

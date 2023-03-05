@@ -12,7 +12,6 @@ export const Footer = styled.View`
     padding: ${RFValue(15)}px;
     border-top-width: 1px;
     border-top-color: #DCE0DD;
-
 `;
 
 export const BtnSair = styled.TouchableOpacity`
@@ -33,9 +32,9 @@ export const TextVersao = styled.Text`
 `;
 
 export const ContainerInfoUser = styled.View`
-   margin-bottom: ${RFValue(20)}px;
-   padding: ${RFValue(10)}px;
-   border-bottom-width: 1px;
+    margin-bottom: ${RFValue(20)}px;
+    padding: ${RFValue(10)}px;
+    border-bottom-width: 1px;
     border-bottom-color: #DCE0DD;
 `;
 
