@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "app_conte_tecnologia",
+    "slug": "app_conte_tecnologia",
+    "version": "1.0.0",
+    "icon": "./src/assets/icon_app.png",
+    "splash": {
+      "image": "./src/assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+        "adaptiveIcon": {
+          "foregroundImage": "./src/assets/icon_app.png",
+          "backgroundColor": "#ffffff"
+        }
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
