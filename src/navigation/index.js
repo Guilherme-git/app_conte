@@ -9,7 +9,7 @@ import Drawer from "./drawer";
 export default () => {
     return (
         <Stack.Navigator
-            initialRouteName="drawer"
+            initialRouteName="login"
             screenOptions={{
                 headerShown: false
             }}>

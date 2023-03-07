@@ -27,6 +27,7 @@ project.xcworkspace
 build/
 .idea
 .gradle
+.package-lock.json
 local.properties
 *.iml
 *.hprof
