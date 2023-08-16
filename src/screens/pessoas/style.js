@@ -66,19 +66,6 @@ export const CardInfo = styled.View`
     flex: 1;
     margin-right: ${RFValue(10)}px;
     margin: ${RFValue(10)}px;
-    flex-direction: row;
-`;
-
-export const Image = styled.Image`
-   height: ${RFValue(50)}px;
-   width: ${RFValue(50)}px;
-   align-self: center;
-   margin-right: ${RFValue(10)}px;
-   border-radius: ${RFValue(8)}px;
-`;
-
-export const CardName = styled.View`
-
 `;
 
 export const CardTitle = styled.Text`
@@ -87,7 +74,7 @@ export const CardTitle = styled.Text`
     font-weight: bold;
 `;
 
-export const CardCategoria = styled.Text`
+export const CardCpfCnpj = styled.Text`
     font-size: ${RFValue(13)}px;
     color: #cacaca;
     font-weight: bold;

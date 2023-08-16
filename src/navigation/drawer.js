@@ -3,14 +3,21 @@ import CustomDrawer from '../components/customDrawer';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons'; 
+import { Entypo } from '@expo/vector-icons';
 
 const Drawer = createDrawerNavigator();
 
 import Home from '../screens/home'
 import Produto from '../screens/produtos'
+import ProdutoCadastro from '../screens/produtos/cadastro'
+import ProdutoEditar from '../screens/produtos/editar'
 import Vendas from '../screens/vendas';
-import Clientes from '../screens/clientes'
+import VendasCadastro from '../screens/vendas/cadastrar'
+import VendasEditar from '../screens/vendas/editar'
+import Cupom from '../screens/vendas/cupom'
+import Pessoas from '../screens/pessoas'
+import PessoasCadastro from '../screens/pessoas/cadastro'
+import PessoasEditar from '../screens/pessoas/editar'
 
 export default () => {
     return (
@@ -45,12 +52,42 @@ export default () => {
                 }}
             />
 
-            <Drawer.Screen name="cliente" component={Clientes}
+            <Drawer.Screen name="venda-cadastro" component={VendasCadastro}
                 options={{
-                    title: 'Clientes',
+                    drawerItemStyle: { display: 'none' }
+                }}
+            />
+
+            <Drawer.Screen name="venda-editar" component={VendasEditar}
+                options={{
+                    drawerItemStyle: { display: 'none' }
+                }}
+            />
+
+            <Drawer.Screen name="cupom" component={Cupom}
+                options={{
+                    drawerItemStyle: { display: 'none' }
+                }}
+            />
+
+            <Drawer.Screen name="pessoas" component={Pessoas}
+                options={{
+                    title: 'Pessoas',
                     drawerIcon: ({ color }) => (
                         <Entypo name="users" size={24} color={color} />
                     )
+                }}
+            />
+
+            <Drawer.Screen name="pessoa-cadastro" component={PessoasCadastro}
+                options={{
+                    drawerItemStyle: { display: 'none' },
+                }}
+            />
+
+            <Drawer.Screen name="pessoa-editar" component={PessoasEditar}
+                options={{
+                    drawerItemStyle: { display: 'none' },
                 }}
             />
 
@@ -60,6 +97,16 @@ export default () => {
                     drawerIcon: ({ color }) => (
                         <FontAwesome5 name="box" size={24} color={color} />
                     )
+                }}
+            />
+            <Drawer.Screen name="produto-cadastro" component={ProdutoCadastro}
+                options={{
+                    drawerItemStyle: { display: 'none' },
+                }}
+            />
+            <Drawer.Screen name="produto-editar" component={ProdutoEditar}
+                options={{
+                    drawerItemStyle: { display: 'none' },
                 }}
             />
 

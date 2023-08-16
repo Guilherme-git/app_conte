@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { LinearGradient } from 'expo-linear-gradient';
+import { ActivityIndicator } from 'react-native';
 import Checkbox from 'expo-checkbox';
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import Input from "../../components/input/index";
+import AwesomeAlert from 'react-native-awesome-alerts';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import api from '../../service'
 
 import {
     Content,
@@ -18,10 +22,61 @@ import {
 
 export default () => {
     const navigation = useNavigation()
+    const [usuario, setUsuario] = useState("conte");
+    const [senha, setSenha] = useState("Bm152612*");
     const [mostrarSenha, setMostrarSenha] = useState(false)
+    const [loading, setLoading] = useState(false);
+    const [alert, setAlert] = useState({
+        open: false,
+        title: '',
+        message: ''
+    })
 
-    const entrar = () => {
-        navigation.navigate('drawer')
+    useFocusEffect(
+        useCallback(() => {
+            const response = async () => {
+                if ((await AsyncStorage.getItem('@app_conte')) !== null) {
+                    navigation.navigate('drawer');   
+                }
+            };
+            response();
+        }, []),
+    );
+
+
+    const entrar = async () => {
+        if (!usuario || !senha) {
+            setAlert({
+                open: true,
+                title: 'Atenção',
+                message: 'Preencha todas as informações'
+            })
+            return
+        }
+        try {
+            setLoading(true)
+            const response = await api.post('/app/login', {
+                usuario,
+                senha
+            });
+            const user = response.data.user;
+            const business = response.data.business
+            const data = Object.assign(user, {business: business})
+           
+            await AsyncStorage.setItem("@app_conte", JSON.stringify(data))
+            navigation.navigate('drawer')
+            setLoading(false)
+        } catch (error) {
+            setLoading(false)
+            if (error.response.data.message) {
+                setAlert({
+                    open: true,
+                    title: 'Atenção',
+                    message: error.response.data.message
+                })
+            }
+            return
+        }
     }
 
     return (
@@ -31,12 +86,31 @@ export default () => {
                 <Image resizeMode="contain" source={require('../../assets/logo_conte.png')} />
             </ContainerImage>
 
+            <AwesomeAlert
+                show={alert.open}
+                title={alert.title}
+                message={alert.message}
+                closeOnTouchOutside={false}
+                closeOnHardwareBackPress={false}
+                showConfirmButton={true}
+                confirmText="Ok"
+                confirmButtonColor="#DD6B55"
+                onConfirmPressed={() => {
+                    setAlert({
+                        open: false,
+                        title: '',
+                        message: ''
+                    })
+
+                }}
+            />
+
             <Content>
                 <Title>Acessar</Title>
 
                 <ContainerForm>
-                    <Input placeholder="Usuário"/>
-                    <Input placeholder="Senha" secureTextEntry={mostrarSenha ? false : true} />
+                    <Input placeholder="Usuário" value={usuario} onChangeText={t => setUsuario(t)} />
+                    <Input placeholder="Senha" value={senha} onChangeText={t => setSenha(t)} secureTextEntry={mostrarSenha ? false : true} />
 
                     <ContainerMostrarSenha>
                         <Checkbox
@@ -45,7 +119,7 @@ export default () => {
                             color={mostrarSenha ? '#008be3' : undefined}
                             style={{ alignSelf: 'center', borderRadius: 10 }}
                         />
-                        <TextMostarSenha onPress={()=>setMostrarSenha(!mostrarSenha)}>Mostrar senha</TextMostarSenha>
+                        <TextMostarSenha onPress={() => setMostrarSenha(!mostrarSenha)}>Mostrar senha</TextMostarSenha>
                     </ContainerMostrarSenha>
 
 
@@ -55,8 +129,9 @@ export default () => {
                             borderRadius: 8,
                             marginTop: 50,
                         }}>
-                        <Btn onPress={entrar}>
-                            <TextBtn>Entrar</TextBtn>
+                        <Btn onPress={entrar} disabled={loading && true}>
+                            {loading ? <ActivityIndicator color={"#fff"} /> : <TextBtn>Entrar</TextBtn>}
+
                         </Btn>
 
                     </LinearGradient>

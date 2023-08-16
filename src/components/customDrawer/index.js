@@ -1,8 +1,9 @@
-import React from 'react';
-import { DrawerContentScrollView, DrawerItemList} from '@react-navigation/drawer';
+import React, { useEffect, useState } from 'react';
+import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { DrawerActions } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 import { AntDesign } from '@expo/vector-icons';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import {
     Container,
@@ -17,7 +18,24 @@ import {
 } from './style'
 
 export default (props) => {
-;    const navigation = useNavigation();
+    const navigation = useNavigation();
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const response = async () => {
+            const userLogado = JSON.parse(await AsyncStorage.getItem("@app_conte"));
+            setUser(userLogado)
+            if (userLogado == null) {
+                navigation.navigate("login")
+            }
+        }
+        response()
+    }, [])
+
+    const deslogar = async () => {
+        await AsyncStorage.removeItem("@app_conte")
+        navigation.dispatch(DrawerActions.closeDrawer()), navigation.navigate('login')
+    }
 
     return (
         <Container>
@@ -25,8 +43,8 @@ export default (props) => {
             <DrawerContentScrollView {...props}>
 
                 <ContainerInfoUser>
-                    <ImageUser resizeMode='contain' source={{ uri: 'http://s2.glbimg.com/jsaPuF7nO23vRxQkuJ_V3WgouKA=/e.glbimg.com/og/ed/f/original/2014/06/10/461777879.jpg' }} />
-                    <NomeUser>Conte tecnologia</NomeUser>
+                    <ImageUser resizeMode='contain' source={{ uri: `http://app.contetecnologia.com.br/uploads/business_logos/${user?.business?.logo}` }} />
+                    <NomeUser>{user?.first_name+" "+user?.last_name}</NomeUser>
                 </ContainerInfoUser>
 
                 <ContainerList>
@@ -36,7 +54,7 @@ export default (props) => {
             </DrawerContentScrollView>
 
             <Footer>
-                <BtnSair onPress={() => (navigation.dispatch(DrawerActions.closeDrawer()),navigation.navigate('login') )}>
+                <BtnSair onPress={deslogar}>
                     <AntDesign name="logout" size={18} color="#7E1A1E" />
                     <TextBtnSair>Sair</TextBtnSair>
                 </BtnSair>

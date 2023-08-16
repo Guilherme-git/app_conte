@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import SelectDropdown from 'react-native-select-dropdown'
 import { ScrollView, ActivityIndicator } from 'react-native';
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, FontAwesome, EvilIcons } from '@expo/vector-icons';
 import Header from "../../components/header";
 import Input from '../../components/input'
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import api from '../../service'
 
 import {
@@ -12,25 +13,25 @@ import {
     Content,
     ContainerBtn,
     TextBtn,
+    ContainerFilter,
     ContainerSearch,
     ContainerList,
     Card,
     CardTitle,
-    CardCategoria,
+    CardCpfCnpj,
     CardInfo,
     BtnIcon,
-    List,
-    Image,
-    CardName
+    List
 } from './style'
 
 export default () => {
+    const countries = ["Pessoa juridica", "Pessoa fisica"]
+    const navigation = useNavigation();
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState(null);
     const [search, setSearch] = useState('');
-    const [products, setProducts] = useState([]);
+    const [pessoas, setPessoas] = useState([]);
     const [list, setList] = useState([]);
-    const navigation = useNavigation();
 
     useFocusEffect(useCallback(() => {
         setLoading(true)
@@ -39,9 +40,9 @@ export default () => {
             setUser(userLogado)
 
             if (userLogado) {
-                const listProducts = await api.get(`/app/product/list?business_id=${userLogado.business.id}&owner_id=${userLogado.id}`)
-                setProducts(listProducts.data)
-                setList(listProducts.data)
+                const listPessoas = await api.get(`/app/contact/list?business_id=${userLogado.business.id}&owner_id=${userLogado.id}`)
+                setPessoas(listPessoas.data)
+                setList(listPessoas.data)
             }
         }
         response()
@@ -50,11 +51,12 @@ export default () => {
 
     useEffect(() => {
         if (search == '') {
-            setList(products)
+            setList(pessoas)
+
         } else {
             setList(
-                products.filter((product) => {
-                    if (product.name.toLowerCase().indexOf(search.toLowerCase()) > -1) {
+                pessoas.filter((pessoa) => {
+                    if (pessoa.name.toLowerCase().indexOf(search.toLowerCase()) > -1) {
                         return true
                     } else {
                         return false
@@ -66,20 +68,22 @@ export default () => {
 
     return (
         <Container>
-            <Header nome={"Produtos"} />
+            <Header nome={"Pessoas"} />
 
             <Content>
                 {loading ? <ActivityIndicator color="#008be3" size={30} style={{ marginTop: 10 }} /> :
                     <>
-                        <ContainerBtn onPress={() => navigation.navigate("produto-cadastro")}>
-                            <TextBtn>Novo produto</TextBtn>
+                        <ContainerBtn onPress={() => navigation.navigate("pessoa-cadastro")}>
+                            <TextBtn>Nova pessoa</TextBtn>
                         </ContainerBtn>
+
 
                         <ContainerSearch>
                             <Input onChangeText={t => setSearch(t)}
-                                placeholder={"Pesquise pelo nome do produto"} />
+                                placeholder={"Pesquise pelo nome da pessoa"} />
                             <AntDesign name="search1" size={24} color="#cacaca" style={{ marginLeft: 10, alignSelf: 'center' }} />
                         </ContainerSearch>
+
 
                         <ContainerList>
                             <List
@@ -90,18 +94,11 @@ export default () => {
                                     <Card>
                                         <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled>
                                             <CardInfo>
-                                                <Image source={{ uri: `${item?.image_url}` }} />
-                                                <CardName>
-                                                    <CardTitle>{item.name}</CardTitle>
-                                                    {item.variations.map(varation =>
-                                                        <CardCategoria key={varation.id}>{"R$ " + varation.default_sell_price}</CardCategoria>
-                                                    )}
-
-                                                </CardName>
-
+                                                <CardTitle>{item.name}</CardTitle>
+                                                <CardCpfCnpj>{item.cpf_cnpj}</CardCpfCnpj>
                                             </CardInfo>
                                         </ScrollView>
-                                        <BtnIcon onPress={() => navigation.navigate('produto-editar', {
+                                        <BtnIcon onPress={() => navigation.navigate('pessoa-editar', {
                                             id: item.id
                                         })}>
                                             <AntDesign name="arrowright" size={30} color="#999" style={{ alignSelf: 'center' }} />
@@ -112,6 +109,7 @@ export default () => {
                             />
 
                         </ContainerList>
+
                     </>
                 }
 

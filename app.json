@@ -18,6 +18,15 @@
           "backgroundColor": "#ffffff"
         }
     },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Custom photos permission",
+          "cameraPermission": "Allow $(PRODUCT_NAME) to open the camera"
+        }
+      ]
+    ],
     "assetBundlePatterns": [
       "**/*"
     ]

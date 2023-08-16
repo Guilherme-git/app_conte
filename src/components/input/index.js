@@ -4,11 +4,14 @@ import {
     Container,
 } from './style';
 
-export default ({placeholder, secureTextEntry}) => {
+export default ({placeholder, secureTextEntry, value, onChangeText,keyboardType}) => {
     return (
-        <Container 
+        <Container
+            value={value}
+            onChangeText={onChangeText}
             placeholder={placeholder} 
             secureTextEntry={secureTextEntry} 
+            keyboardType={keyboardType}
         />
     );
 }

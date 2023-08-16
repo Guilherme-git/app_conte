@@ -7,4 +7,5 @@ export const Container = styled.TextInput`
     padding: ${RFValue(10)}px;
     height: ${RFValue(40)}px;
     margin-bottom: ${RFValue(10)}px;
+    width: 100%;
 `;
